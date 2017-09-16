@@ -106,11 +106,7 @@ public class AddressbookUI extends UI {
     private void buildLayout() {
         HorizontalLayout actions = new HorizontalLayout(
                 filter,
-                btnNewContact
-                //btnAudioRecordClick
-        );
-        HorizontalLayout actions2 = new HorizontalLayout(
-//                btnNewContact
+                //btnNewContact,
                 btnAudioRecordClick
         );
 
