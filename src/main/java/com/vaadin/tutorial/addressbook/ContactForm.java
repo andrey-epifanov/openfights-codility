@@ -109,8 +109,8 @@ public class ContactForm extends FormLayout {
     }
 
     @Override
-    public AddressbookUI getUI() {
-        return (AddressbookUI) super.getUI();
+    public VoiceControllUI getUI() {
+        return (VoiceControllUI) super.getUI();
     }
 
 }
