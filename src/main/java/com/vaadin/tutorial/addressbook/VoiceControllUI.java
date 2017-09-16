@@ -2,6 +2,7 @@ package com.vaadin.tutorial.addressbook;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.google.speech.VoiceManager;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -11,10 +12,14 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.tutorial.addressbook.backend.Contact;
 import com.vaadin.tutorial.addressbook.backend.ContactService;
+import com.vaadin.tutorial.addressbook.tab.RatesInfoTab;
+import com.vaadin.tutorial.addressbook.tab.VoiceControlTab;
 import com.vaadin.ui.*;
 import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.ui.Grid;
 import com.vaadin.v7.ui.TextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import vt.audiorecord.AudioRecorder;
 
 /* User Interface written in Java.
@@ -27,10 +32,16 @@ import vt.audiorecord.AudioRecorder;
 @Theme("valo")
 @Widgetset("com.vaadin.v7.Vaadin7WidgetSet")
 public class VoiceControllUI extends UI {
+    private static final Logger logger = LoggerFactory.getLogger(VoiceControllUI.class);
 
-    TabSheet tabsheet = new TabSheet();
+    private TabSheet tabsheet = new TabSheet();
 
     private AudioRecorder recorder = new AudioRecorder();;
+    private VoiceManager voiceManager = new VoiceManager();
+
+    TextField filterContacts = new TextField();
+
+    private VoiceControlTab voiceControlTab;
 
     /*
      * Hundreds of widgets. Vaadin's user interface components are just Java
@@ -39,11 +50,7 @@ public class VoiceControllUI extends UI {
      * com.vaadin.ui package and there are over 500 more in
      * vaadin.com/directory.
      */
-    TextField filter = new TextField();
     Grid contactList = new Grid();
-    Button btnNewContact = new Button("New contact");
-
-    Button btnAudioRecordClick = new Button("Audio Rec. Click Me!");
 
     // ContactForm is an example of a custom component class
     ContactForm contactForm = new ContactForm();
@@ -74,11 +81,6 @@ public class VoiceControllUI extends UI {
          * to synchronously handle those events. Vaadin automatically sends only
          * the needed changes to the web page without loading a new page.
          */
-        btnNewContact.addClickListener(e -> contactForm.edit(new Contact()));
-        btnAudioRecordClick.addClickListener(e -> recorder.execute());
-
-        filter.setInputPrompt("Filter contacts...");
-        filter.addTextChangeListener(e -> refreshContacts(e.getText()));
 
         contactList
                 .setContainerDataSource(new BeanItemContainer<>(Contact.class));
@@ -107,13 +109,17 @@ public class VoiceControllUI extends UI {
         HorizontalLayout mainLayout = new HorizontalLayout(tabsheet, contactForm);
         mainLayout.setSizeFull();
         mainLayout.setExpandRatio(tabsheet, 1);
-//        mainLayout.addComponent();
 
-//        VerticalLayout tab1 = new VerticalLayout();
-//        tab1.addComponent(new Image(null,
-//                new ThemeResource("img/planets/Mercury.jpg")));
+//        tabsheet.addTab(generateCreditCardsInfo(),
+//                "Кредитные Карты",
+//                new ThemeResource("./src/main/resources/img/ratesInfo.bmp"));
 
-        tabsheet.addTab(generateRatesInfo(),
+//        tabsheet.addTab(generateDepositInfo(),
+//                "Депозиты",
+//                new ThemeResource("./src/main/resources/img/ratesInfo.bmp"));
+
+        RatesInfoTab ratesInfoTab = new RatesInfoTab(recorder, voiceManager);
+        tabsheet.addTab(ratesInfoTab.generateRatesInfo(),
                 "Курсы Валют",
                 new ThemeResource("./src/main/resources/img/ratesInfo.bmp"));
 
@@ -121,7 +127,8 @@ public class VoiceControllUI extends UI {
                 "Контакты",
                 new ThemeResource("img/planets/Mercury_symbol.png"));
 
-        tabsheet.addTab(generateTabVoiceControl(),
+        voiceControlTab = new VoiceControlTab(recorder, voiceManager);
+        tabsheet.addTab(voiceControlTab.generateTabVoiceControl(),
                 "VoiceControl",
                 new ThemeResource("img/planets/Mercury_symbol.png"));
 
@@ -129,67 +136,25 @@ public class VoiceControllUI extends UI {
         setContent(mainLayout);
     }
 
-    private VerticalLayout generateRatesInfo() {
-        // Контакты
-        HorizontalLayout actions = new HorizontalLayout(
-                filter,
-                btnNewContact
-                //btnAudioRecordClick
-        );
-
-        actions.setWidth("100%");
-        filter.setWidth("100%");
-        actions.setExpandRatio(filter, 1);
-
-        VerticalLayout left = new VerticalLayout(actions, contactList);
-        left.setSizeFull();
-        contactList.setSizeFull();
-        left.setExpandRatio(contactList, 1);
-
-        VerticalLayout tab = new VerticalLayout();
-        tab.addComponent(new Image(null,
-                new ThemeResource("img/planets/Mercury.jpg")));
-
-        tab.addComponent(left);
-
-        return tab;
-    }
-
-    private VerticalLayout generateTabVoiceControl() {
-        HorizontalLayout actions = new HorizontalLayout(
-                //filter,
-                //btnNewContact
-                btnAudioRecordClick
-        );
-
-        actions.setWidth("100%");
-        filter.setWidth("100%");
-        actions.setExpandRatio(btnAudioRecordClick, 1);
-
-        VerticalLayout left = new VerticalLayout(actions);
-        left.setSizeFull();
-        //contactList.setSizeFull();
-        //left.setExpandRatio(btnAudioRecordClick, 1);
-
-        VerticalLayout tab = new VerticalLayout();
-        tab.addComponent(new Image(null,
-                new ThemeResource("img/planets/Mercury.jpg")));
-
-        tab.addComponent(left);
-        return tab;
-    }
-
+    /** Контакты
+     *
+     * @return
+     */
     private VerticalLayout generateTabContacts() {
-        // Контакты
+        filterContacts.setInputPrompt("Filter contacts...");
+        filterContacts.addTextChangeListener(e -> refreshContacts(e.getText()));
+
+        Button btnNewContact = new Button("New contact");
+        btnNewContact.addClickListener(e -> contactForm.edit(new Contact()));
+
         HorizontalLayout actions = new HorizontalLayout(
-                filter,
+                filterContacts,
                 btnNewContact
-                //btnAudioRecordClick
         );
 
         actions.setWidth("100%");
-        filter.setWidth("100%");
-        actions.setExpandRatio(filter, 1);
+        filterContacts.setWidth("100%");
+        actions.setExpandRatio(filterContacts, 1);
 
         VerticalLayout left = new VerticalLayout(actions, contactList);
         left.setSizeFull();
@@ -214,7 +179,7 @@ public class VoiceControllUI extends UI {
      * MVC, MVP or any other design pattern you choose.
      */
     void refreshContacts() {
-        refreshContacts(filter.getValue());
+        refreshContacts(filterContacts.getValue());
     }
 
     private void refreshContacts(String stringFilter) {
