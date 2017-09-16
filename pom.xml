@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>example</groupId>
-	<artifactId>veedin-</artifactId>
+	<groupId>vaadin</groupId>
+	<artifactId>voice-control</artifactId>
 	<name>Voice-Control</name>
 	<packaging>war</packaging>
 	<version>1.0</version>
@@ -55,6 +55,19 @@
 		<!--<dependencies>-->
 
 	<dependencies>
+		<!-- Google Cloud Speach -->
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>google-cloud-speech</artifactId>
+			<version>0.23.1-alpha</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client -->
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.8.0-beta</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-compatibility-server</artifactId>
@@ -99,11 +112,11 @@
 		</dependency>
 
 		<!-- from my project -->
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20090211</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.json</groupId>-->
+			<!--<artifactId>json</artifactId>-->
+			<!--<version>20090211</version>-->
+		<!--</dependency>-->
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -140,6 +153,13 @@
 					<artifactId>testng</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.0</version>
 		</dependency>
 
 	</dependencies>
