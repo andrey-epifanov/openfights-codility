@@ -13,9 +13,9 @@ import javax.sound.sampled.*;
 public class AudioRecorder {
     private final Logger logger = LoggerFactory.getLogger(AudioRecorder.class);
 
-    private static  final String FILE_PATH = "./tmp/prova.wav";
+    public static  final String FILE_PATH = "./tmp/prova.wav";
     // record duration, in milliseconds
-    private static final long RECORD_TIME = 24000;  // 120000 = 1 minute ; 24000 = 12 sec
+    private static final long RECORD_TIME = 12000;  // 120000 = 1 minute ; 24000 = 12 sec ; 12000 = 6 sec
 
     // path of the wav file
     File wavFile = new File(FILE_PATH);
