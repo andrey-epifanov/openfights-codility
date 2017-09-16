@@ -6,14 +6,12 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.tutorial.addressbook.backend.Contact;
 import com.vaadin.tutorial.addressbook.backend.ContactService;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.ui.Grid;
 import com.vaadin.v7.ui.TextField;
@@ -28,7 +26,9 @@ import vt.audiorecord.AudioRecorder;
 @Title("Addressbook")
 @Theme("valo")
 @Widgetset("com.vaadin.v7.Vaadin7WidgetSet")
-public class AddressbookUI extends UI {
+public class VoiceControllUI extends UI {
+
+    TabSheet tabsheet = new TabSheet();
 
     private AudioRecorder recorder = new AudioRecorder();;
 
@@ -104,10 +104,37 @@ public class AddressbookUI extends UI {
      * choose to setup layout declaratively with Vaadin Designer, CSS and HTML.
      */
     private void buildLayout() {
+        HorizontalLayout mainLayout = new HorizontalLayout(tabsheet, contactForm);
+        mainLayout.setSizeFull();
+        mainLayout.setExpandRatio(tabsheet, 1);
+//        mainLayout.addComponent();
+
+//        VerticalLayout tab1 = new VerticalLayout();
+//        tab1.addComponent(new Image(null,
+//                new ThemeResource("img/planets/Mercury.jpg")));
+
+        tabsheet.addTab(generateRatesInfo(),
+                "Курсы Валют",
+                new ThemeResource("./src/main/resources/img/ratesInfo.bmp"));
+
+        tabsheet.addTab(generateTabContacts(),
+                "Контакты",
+                new ThemeResource("img/planets/Mercury_symbol.png"));
+
+        tabsheet.addTab(generateTabVoiceControl(),
+                "VoiceControl",
+                new ThemeResource("img/planets/Mercury_symbol.png"));
+
+        // Split and allow resizing
+        setContent(mainLayout);
+    }
+
+    private VerticalLayout generateRatesInfo() {
+        // Контакты
         HorizontalLayout actions = new HorizontalLayout(
                 filter,
-                //btnNewContact,
-                btnAudioRecordClick
+                btnNewContact
+                //btnAudioRecordClick
         );
 
         actions.setWidth("100%");
@@ -119,12 +146,63 @@ public class AddressbookUI extends UI {
         contactList.setSizeFull();
         left.setExpandRatio(contactList, 1);
 
-        HorizontalLayout mainLayout = new HorizontalLayout(left, contactForm);
-        mainLayout.setSizeFull();
-        mainLayout.setExpandRatio(left, 1);
+        VerticalLayout tab = new VerticalLayout();
+        tab.addComponent(new Image(null,
+                new ThemeResource("img/planets/Mercury.jpg")));
 
-        // Split and allow resizing
-        setContent(mainLayout);
+        tab.addComponent(left);
+
+        return tab;
+    }
+
+    private VerticalLayout generateTabVoiceControl() {
+        HorizontalLayout actions = new HorizontalLayout(
+                //filter,
+                //btnNewContact
+                btnAudioRecordClick
+        );
+
+        actions.setWidth("100%");
+        filter.setWidth("100%");
+        actions.setExpandRatio(btnAudioRecordClick, 1);
+
+        VerticalLayout left = new VerticalLayout(actions);
+        left.setSizeFull();
+        //contactList.setSizeFull();
+        //left.setExpandRatio(btnAudioRecordClick, 1);
+
+        VerticalLayout tab = new VerticalLayout();
+        tab.addComponent(new Image(null,
+                new ThemeResource("img/planets/Mercury.jpg")));
+
+        tab.addComponent(left);
+        return tab;
+    }
+
+    private VerticalLayout generateTabContacts() {
+        // Контакты
+        HorizontalLayout actions = new HorizontalLayout(
+                filter,
+                btnNewContact
+                //btnAudioRecordClick
+        );
+
+        actions.setWidth("100%");
+        filter.setWidth("100%");
+        actions.setExpandRatio(filter, 1);
+
+        VerticalLayout left = new VerticalLayout(actions, contactList);
+        left.setSizeFull();
+        contactList.setSizeFull();
+        left.setExpandRatio(contactList, 1);
+
+        VerticalLayout tab = new VerticalLayout();
+        tab.addComponent(new Image(null,
+                new ThemeResource("img/planets/Mercury.jpg")));
+
+        tab.addComponent(left);
+
+        return tab;
     }
 
     /*
@@ -153,7 +231,7 @@ public class AddressbookUI extends UI {
      * application.
      */
     @WebServlet(urlPatterns = "/*")
-    @VaadinServletConfiguration(ui = AddressbookUI.class, productionMode = false)
+    @VaadinServletConfiguration(ui = VoiceControllUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
     }
 
