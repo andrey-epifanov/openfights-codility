@@ -1,5 +1,8 @@
 package vt.audiorecord;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import javax.sound.sampled.*;
 
@@ -8,8 +11,9 @@ import javax.sound.sampled.*;
  * author: www.codejava.net
  */
 public class AudioRecorder {
+    private final Logger logger = LoggerFactory.getLogger(AudioRecorder.class);
 
-    private static  final String FILE_PATH = "/tmp/prova.wav";
+    private static  final String FILE_PATH = "./tmp/prova.wav";
     // record duration, in milliseconds
     private static final long RECORD_TIME = 24000;  // 120000 = 1 minute ; 24000 = 12 sec
 
@@ -40,6 +44,14 @@ public class AudioRecorder {
      * Captures the sound and record into a WAV file
      */
     void start() {
+        //TODO: debug
+        File current_folder = new File("./");
+        logger.info("Current folder = " + current_folder.getAbsolutePath());
+
+        File folderTmp = new File ("./tmp");
+        if (!folderTmp.exists())
+            folderTmp.mkdir();
+
         try {
             AudioFormat format = getAudioFormat();
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
