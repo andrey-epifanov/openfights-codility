@@ -8,6 +8,7 @@ import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.*;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
+import vt.audiorecord.AudioRecorder;
 import vt.uiparts.*;
 
 import java.io.File;
@@ -21,6 +22,8 @@ public class UImy extends UI {
 
     private File currentPath;
 
+    private AudioRecorder recorder = new AudioRecorder();;
+
     private MenuBarMy menuBarMy = new MenuBarMy();
     private TopPanel topPanel = new TopPanel();
     private TreeTableMy treeTableMy = new TreeTableMy();
@@ -29,14 +32,16 @@ public class UImy extends UI {
     private WebCamMy webCamMy = new WebCamMy();
     private MediaPlayerMy mediaPlayerMy = new MediaPlayerMy();
 
+    public UImy() {}
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
         layout.setMargin(true);
         setContent(layout);
 
-        Button buttonOneClick = new Button("Click Me");
-        buttonOneClick.addClickListener(new Button.ClickListener() {
+        Button btnOneClick = new Button("Click Me");
+        btnOneClick.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 layout.addComponent(new Label("Thank you for clicking"));
@@ -45,9 +50,19 @@ public class UImy extends UI {
             }
         });
 
+        Button btnAudioRecordClick = new Button("Audio Rec. Click Me!");
+        btnAudioRecordClick.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                layout.addComponent(new Label("Thank you for clicking"));
+                recorder.execute();
+            }
+        });
+
         menuBarMy.initMenuBar(layout, this);
         topPanel.initTopPanel(layout, this);
-        layout.addComponent(buttonOneClick);
+        layout.addComponent(btnOneClick);
+        layout.addComponent(btnAudioRecordClick);
         treeTableMy.initFileTree(layout, this);
         viewPanel.initPreview(layout);
 //        webCamMy.initWebCam(layout, this); // not work

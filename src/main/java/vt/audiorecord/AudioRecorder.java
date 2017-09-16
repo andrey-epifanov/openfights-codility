@@ -1,4 +1,4 @@
-package audiorecorder;
+package vt.audiorecord;
 
 import java.io.*;
 import javax.sound.sampled.*;
@@ -8,11 +8,13 @@ import javax.sound.sampled.*;
  * author: www.codejava.net
  */
 public class AudioRecorder {
+
+    private static  final String FILE_PATH = "/tmp/prova.wav";
     // record duration, in milliseconds
-    static final long RECORD_TIME = 120000;  // 1 minute
+    private static final long RECORD_TIME = 24000;  // 120000 = 1 minute ; 24000 = 12 sec
 
     // path of the wav file
-    File wavFile = new File("/tmp/prova.wav");
+    File wavFile = new File(FILE_PATH);
 
     // format of audio file
     AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
@@ -74,6 +76,26 @@ public class AudioRecorder {
         line.stop();
         line.close();
         System.out.println("Finished");
+    }
+
+    public void execute() {
+        // creates a new thread that waits for a specified
+        // of time before stopping
+        Thread stopper = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Thread.sleep(RECORD_TIME);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                finish();
+            }
+        });
+
+        stopper.start();
+
+        // start recording
+        start();
     }
 
     /**
