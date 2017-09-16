@@ -1,0 +1,1 @@
+mvn dependency:tree -Dverbose > dependency_tree.log
