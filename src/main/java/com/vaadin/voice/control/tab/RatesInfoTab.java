@@ -1,6 +1,7 @@
 package com.vaadin.voice.control.tab;
 
 import com.google.speech.VoiceManager;
+import com.vaadin.server.FileResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.voice.control.backend.Contact;
 import com.vaadin.voice.control.backend.Rate;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vt.audiorecord.AudioRecorder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class RatesInfoTab {
     private VoiceManager voiceManager;
     private List<List<String>> translated = new ArrayList<>(); // get only first
 
-    private TextArea area;
+    Image image = new Image();
     private TextField filter;
 
     Grid ratesList = new Grid();
@@ -58,6 +60,20 @@ public class RatesInfoTab {
     public VerticalLayout generateRatesInfo() {
         configureRatesList();
 
+        image = new Image("Image from file",
+            new FileResource(new File("./src/main/webapp/WEB-INF/images/saveMoney_v01.jpg")));
+        image.setVisible(false);
+        Button btnUseSkin = new Button("Skin!");
+        btnUseSkin.addClickListener(
+                e -> {
+//                    image = new Image("Image from file",
+//                        new FileResource(new File("./src/main/webapp/WEB-INF/images/saveMoney_v01.jpg")));
+                    image.setVisible(true);
+                    //image.attach();
+                }
+        );
+        HorizontalLayout skin = new HorizontalLayout(image, btnUseSkin);
+
         filter = new TextField();
         filter.setInputPrompt("Filter rates...");
         filter.addTextChangeListener(e -> filterRatesBy(e.getText())); // refresh rates
@@ -74,7 +90,7 @@ public class RatesInfoTab {
         filter.setWidth("100%");
         actions.setExpandRatio(filter, 1);
 
-        VerticalLayout left = new VerticalLayout(actions, ratesList);
+        VerticalLayout left = new VerticalLayout(skin, actions, ratesList);
         left.setSizeFull();
         ratesList.setSizeFull();
         left.setExpandRatio(ratesList, 1);
