@@ -2,6 +2,7 @@ package com.vaadin.voice.control.tab;
 
 import com.google.speech.VoiceManager;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.voice.control.backend.Contact;
 import com.vaadin.voice.control.backend.Rate;
 import com.vaadin.voice.control.bank.RatesHelper;
 import com.vaadin.ui.*;
@@ -91,10 +92,10 @@ public class RatesInfoTab {
         List<Rate> rates = RatesHelper.getRatesFromBank();
 
         BeanItemContainer<Rate> container =
-                new BeanItemContainer<Rate>(Rate.class, rates);
+                new BeanItemContainer<>(Rate.class, rates);
 
-        ratesList.setData(container);
-        ratesList.setVisible(true);
+        ratesList.setContainerDataSource(container);
+//        ratesList.setVisible(true);
     }
 
     private void filterRatesBy(String text) {
