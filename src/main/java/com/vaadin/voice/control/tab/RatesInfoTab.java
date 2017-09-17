@@ -3,13 +3,11 @@ package com.vaadin.voice.control.tab;
 import com.google.speech.VoiceManager;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.voice.control.backend.Rate;
-import com.vaadin.ui.*;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.v7.data.util.BeanItemContainer;
-import com.vaadin.v7.ui.TextField;
 import com.vaadin.voice.control.bank.RatesHelper;
+import com.vaadin.ui.*;
+import com.vaadin.v7.data.util.BeanItemContainer;
+import com.vaadin.v7.ui.Grid;
+import com.vaadin.v7.ui.TextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vt.audiorecord.AudioRecorder;
@@ -30,7 +28,8 @@ public class RatesInfoTab {
     private TextArea area;
     private TextField filter;
 
-    com.vaadin.v7.ui.Grid ratesList = new com.vaadin.v7.ui.Grid();
+    Grid ratesList = new Grid();
+    //Table grid = new Table();
 
     public RatesInfoTab(AudioRecorder recorder, VoiceManager voiceManager) {
         this.recorder = recorder;
