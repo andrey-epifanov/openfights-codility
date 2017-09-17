@@ -28,7 +28,8 @@ public class RatesInfoTab {
     private VoiceManager voiceManager;
     private List<List<String>> translated = new ArrayList<>(); // get only first
 
-    Image image = new Image();
+    private Image image = new Image();
+    boolean imageShow = false;
     private TextField filter;
 
     Grid ratesList = new Grid();
@@ -68,7 +69,13 @@ public class RatesInfoTab {
                 e -> {
 //                    image = new Image("Image from file",
 //                        new FileResource(new File("./src/main/webapp/WEB-INF/images/saveMoney_v01.jpg")));
-                    image.setVisible(true);
+                    if (imageShow) {
+                        image.setVisible(false);
+                        imageShow = false;
+                    } else {
+                        image.setVisible(true);
+                        imageShow = true;
+                    }
                     //image.attach();
                 }
         );
