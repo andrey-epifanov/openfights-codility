@@ -13,7 +13,7 @@ import org.joda.time.DateTime;
 @Setter
 @ToString
 public class Rate {
-    private DateTime startDate;
+    private String startDate;
     private String operationType;
     private String rateValue;
     private String curCharCode;

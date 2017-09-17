@@ -1,7 +1,6 @@
 package com.vaadin.voice.control.tab;
 
 import com.google.speech.VoiceManager;
-import com.jayway.restassured.response.Response;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.voice.control.backend.Rate;
 import com.vaadin.ui.*;
@@ -10,15 +9,13 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.ui.TextField;
-import org.json.JSONArray;
+import com.vaadin.voice.control.bank.RatesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vt.audiorecord.AudioRecorder;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.jayway.restassured.RestAssured;
 
 /**
  * Created by Андрей on 16.09.2017.
@@ -63,10 +60,10 @@ public class RatesInfoTab {
 
         filter = new TextField();
         filter.setInputPrompt("Filter rates...");
-        filter.addTextChangeListener(e -> refreshRates(e.getText())); // refresh rates
+        filter.addTextChangeListener(e -> filterRatesBy(e.getText())); // refresh rates
 
         Button btnNewContact = new Button("Обновить");
-        btnNewContact.addClickListener(e -> refreshRatesFromNet()); // !!!!!!!!!!
+        btnNewContact.addClickListener(e -> refreshRatesFromNet());
 
         HorizontalLayout actions = new HorizontalLayout(
                 filter,
@@ -92,27 +89,16 @@ public class RatesInfoTab {
     }
 
     private void refreshRatesFromNet() {
-        Response resp = RestAssured.get("https://api.open.ru/getrates/1.0.0/rates/cash");
+        List<Rate> rates = RatesHelper.getRatesFromBank();
 
-        JSONArray jsonArray = new JSONArray(resp.asString());
-//        jsonArray.get
-//
-//        ArrayList<Rate> rates = new ArrayList<>();
-//
-//        for(Object json : jsonArray) {
-//            json
-//        }
-//        rates
-//
-//        BeanItemContainer<Rate> container =
-//                new BeanItemContainer<Rate>(Rate.class, rates);
+        BeanItemContainer<Rate> container =
+                new BeanItemContainer<Rate>(Rate.class, rates);
 
-//        ratesList.setData(jsonArray);
-
-//        jsonResponse; = > to Grid rates
+        ratesList.setData(container);
+        ratesList.setVisible(true);
     }
 
-    private void refreshRates(String text) {
+    private void filterRatesBy(String text) {
 
     }
 }
