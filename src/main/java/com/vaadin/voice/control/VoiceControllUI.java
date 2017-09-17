@@ -1,4 +1,4 @@
-package com.vaadin.tutorial.addressbook;
+package com.vaadin.voice.control;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -10,10 +10,10 @@ import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.tutorial.addressbook.backend.Contact;
-import com.vaadin.tutorial.addressbook.backend.ContactService;
-import com.vaadin.tutorial.addressbook.tab.RatesInfoTab;
-import com.vaadin.tutorial.addressbook.tab.VoiceControlTab;
+import com.vaadin.voice.control.backend.Contact;
+import com.vaadin.voice.control.backend.ContactService;
+import com.vaadin.voice.control.tab.RatesInfoTab;
+import com.vaadin.voice.control.tab.VoiceControlTab;
 import com.vaadin.ui.*;
 import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.ui.Grid;
@@ -28,7 +28,7 @@ import vt.audiorecord.AudioRecorder;
  * By default, a new UI instance is automatically created when the page is loaded. To reuse
  * the same instance, add @PreserveOnRefresh.
  */
-@Title("Addressbook")
+@Title("Voice-Control")
 @Theme("valo")
 @Widgetset("com.vaadin.v7.Vaadin7WidgetSet")
 public class VoiceControllUI extends UI {
@@ -144,7 +144,7 @@ public class VoiceControllUI extends UI {
         filterContacts.setInputPrompt("Filter contacts...");
         filterContacts.addTextChangeListener(e -> refreshContacts(e.getText()));
 
-        Button btnNewContact = new Button("New contact");
+        Button btnNewContact = new Button("Новый Контакт");
         btnNewContact.addClickListener(e -> contactForm.edit(new Contact()));
 
         HorizontalLayout actions = new HorizontalLayout(

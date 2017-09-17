@@ -1,4 +1,4 @@
-package com.vaadin.tutorial.addressbook.backend;
+package com.vaadin.voice.control.backend;
 
 import org.apache.commons.beanutils.BeanUtils;
 

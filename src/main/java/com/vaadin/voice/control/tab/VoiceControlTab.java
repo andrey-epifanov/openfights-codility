@@ -1,4 +1,4 @@
-package com.vaadin.tutorial.addressbook.tab;
+package com.vaadin.voice.control.tab;
 
 import com.google.speech.VoiceManager;
 import com.vaadin.server.ThemeResource;
