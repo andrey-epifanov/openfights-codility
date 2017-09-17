@@ -2,7 +2,7 @@ download from
 https://vaadin.com/maven
 
 
-mvn-Veedin-Test
+mvn-vaadin-Test
 ==============
 
 Template for a simple Vaadin application that only requires a Servlet 3.0 container to run.
